@@ -42,6 +42,8 @@ builder.Services.AddAuthentication(options =>
 // ===== REGISTER CUSTOM SERVICES =====
 builder.Services.AddScoped<JwtTokenGenerator>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<PasswordService>();
+
 
 
 // ===== ADD CONTROLLERS & SWAGGER =====

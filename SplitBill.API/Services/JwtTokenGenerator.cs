@@ -19,11 +19,16 @@ namespace SplitBill.API.Services
 
         public string GenerateToken(User user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             var claims = new List<Claim>
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.Role, user.Role),
+
     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
@@ -39,6 +44,8 @@ namespace SplitBill.API.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
 
     }
 }

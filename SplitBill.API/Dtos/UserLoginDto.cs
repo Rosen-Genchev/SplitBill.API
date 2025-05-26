@@ -1,10 +1,14 @@
-﻿namespace SplitBill.API.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SplitBill.API.Dtos
 {
     public class UserLoginDto
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
     }
 }
