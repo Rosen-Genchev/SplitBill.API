@@ -94,7 +94,7 @@ namespace SplitBill.API.Migrations
                     b.ToTable("GroupMembers");
                 });
 
-            modelBuilder.Entity("SplitBill.API.Entities.User", b =>
+            modelBuilder.Entity("User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,12 +106,17 @@ namespace SplitBill.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("RegisteredAt")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -130,8 +135,8 @@ namespace SplitBill.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SplitBill.API.Entities.User", "PaidBy")
-                        .WithMany("ExpensesPaid")
+                    b.HasOne("User", "PaidBy")
+                        .WithMany()
                         .HasForeignKey("PaidById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -149,7 +154,7 @@ namespace SplitBill.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SplitBill.API.Entities.User", "User")
+                    b.HasOne("User", "User")
                         .WithMany("GroupMemberships")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -167,10 +172,8 @@ namespace SplitBill.API.Migrations
                     b.Navigation("Members");
                 });
 
-            modelBuilder.Entity("SplitBill.API.Entities.User", b =>
+            modelBuilder.Entity("User", b =>
                 {
-                    b.Navigation("ExpensesPaid");
-
                     b.Navigation("GroupMemberships");
                 });
 #pragma warning restore 612, 618
