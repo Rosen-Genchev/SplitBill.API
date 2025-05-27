@@ -38,6 +38,12 @@ namespace SplitBill.API.Data
             modelBuilder.Entity<Expense>()
                 .Property(e => e.Amount)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Expense>()
+                .HasMany(e => e.Participants)
+                .WithOne(p => p.Expense)
+                .HasForeignKey(p => p.ExpenseId);
+
         }
     }
 }

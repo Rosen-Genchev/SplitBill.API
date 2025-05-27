@@ -14,5 +14,8 @@
 
         public int GroupId { get; set; }
         public Group Group { get; set; } = null!;
+        public ICollection<Participant> Participants { get; set; } = new List<Participant>();
+
+
     }
 }

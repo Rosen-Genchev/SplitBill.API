@@ -8,7 +8,7 @@ namespace SplitBill.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // optional now, we’ll integrate JWT later
+   
     public class ExpensesController : ControllerBase
     {
         private readonly AppDbContext _context;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SplitBill.API.Data;
 using SplitBill.API.Dtos;
 using SplitBill.API.Entities;
@@ -56,21 +57,22 @@ namespace SplitBill.API.Controllers
 
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] UserLoginDto loginDto)
+        public async Task<IActionResult> Login(UserLoginDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            var user = _context.Users.FirstOrDefault(u => u.Email == loginDto.Email);
+            if (user == null)
+                return Unauthorized("Invalid username or password");
 
-            if (user == null || !_passwordService.VerifyPassword(user.PasswordHash, loginDto.Password))
-            {
-                return Unauthorized("Invalid email or password");
-            }
+            bool isPasswordValid = _passwordService.VerifyPassword(dto.Password, user.PasswordHash);
 
+            if (!isPasswordValid)
+                return Unauthorized("Invalid username or password");
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
-            return Ok(new { token });
+            // Proceed with generating JWT or session
+            return Ok("Login successful");
         }
+
     }
 }
