@@ -1,15 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BCrypt.Net;
 
-public class PasswordService
+namespace SplitBill.API.Services
 {
-    private readonly PasswordHasher<string> _hasher = new();
-
-    public string HashPassword(string userId, string password) =>
-        _hasher.HashPassword(userId, password);
-
-    public bool VerifyPassword(string userId, string hashedPassword, string inputPassword)
+    public class PasswordService
     {
-        var result = _hasher.VerifyHashedPassword(userId, hashedPassword, inputPassword);
-        return result == PasswordVerificationResult.Success;
+        public string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public bool VerifyPassword(string password, string hashedPassword)
+        {
+            Console.WriteLine($"[DEBUG] hashedPassword: {hashedPassword}");
+
+
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+        }
     }
 }

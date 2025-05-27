@@ -18,11 +18,9 @@ namespace SplitBill.API.Dtos
         public string Password { get; set; }
 
         [Required]
-        [MaxLength(50)]
-        public string FirstName { get; set; }
+        [MaxLength(100)]
+        public string FullName { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public string LastName { get; set; }
+       
     }
 }
