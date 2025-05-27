@@ -57,22 +57,21 @@ namespace SplitBill.API.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto dto)
+        public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+            if (user == null || !_passwordService.VerifyPassword(loginDto.Password, user.PasswordHash))
+                return Unauthorized("Invalid credentials");
 
-            if (user == null)
-                return Unauthorized("Invalid username or password");
+            var token = _jwtTokenGenerator.GenerateToken(user);
 
-            bool isPasswordValid = _passwordService.VerifyPassword(dto.Password, user.PasswordHash);
-
-            if (!isPasswordValid)
-                return Unauthorized("Invalid username or password");
-
-            // Proceed with generating JWT or session
-            return Ok("Login successful");
+            return Ok(new
+            {
+                token,
+                user = new { user.Id, user.Email, user.FullName, user.Role }
+            });
         }
-
     }
+
 }
+

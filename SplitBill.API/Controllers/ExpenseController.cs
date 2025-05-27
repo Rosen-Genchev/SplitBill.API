@@ -7,6 +7,8 @@ using SplitBill.API.Entities;
 namespace SplitBill.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
+
     [ApiController]
    
     public class ExpensesController : ControllerBase
